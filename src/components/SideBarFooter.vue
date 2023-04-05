@@ -13,7 +13,7 @@ const store = useChessboardStore()
         This is a test for the senior front end developer position. The test is to implement a chess
         board and a sidebar that displays the moves made.
       </p>
-      <Button @click="($event) => store.$reset()">Reset</Button>
+      <Button @click="() => store.$reset()">Reset</Button>
     </div>
   </div>
 </template>

@@ -1,21 +1,23 @@
 <script setup>
+import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useChessboardStore } from '@/stores/chessboard'
 
-const store = useChessboardStore()
-const { clicks } = storeToRefs(store)
+const { clicks } = storeToRefs(useChessboardStore())
 
-function createSquareColorStyle(click) {
-  const [rank, file] = click.split('')
-  const isLight = (parseInt(file) + 'abcdefgh'.indexOf(rank)) % 2 === 0
-  return isLight ? 'square-light' : 'square-dark'
-}
+const squareColorStyles = computed(() =>
+  clicks.value.map((click) => {
+    const [rank, file] = click.split('')
+    const isLight = (parseInt(file) + 'abcdefgh'.indexOf(rank)) % 2 === 0
+    return isLight ? 'square-light' : 'square-dark'
+  })
+)
 </script>
 
 <template>
   <div class="chess-moves">
     <div class="chess-move" v-for="(click, index) in clicks" :key="click">
-      <span class="square-color-icon" :class="createSquareColorStyle(click)">{{
+      <span class="square-color-icon" :class="squareColorStyles[index]">{{
         index % 2 == 0 ? index / 2 + 1 : '...'
       }}</span>
       {{ click }}
