@@ -5,7 +5,7 @@ import './assets/global.scss'
 </script>
 
 <template>
-  <main>
+  <main v-cloak>
     <ChessBoard />
     <SideBar />
   </main>

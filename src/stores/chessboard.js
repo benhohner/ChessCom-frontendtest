@@ -20,5 +20,10 @@ export const useChessboardStore = defineStore('chessboard', () => {
     this.clicks = this.clicks.filter((item) => item !== coordinate)
   }
 
-  return { clicks, highlights, registerClick, removeClick }
+  function $reset() {
+    clicks.value = []
+    highlights.value = new Set([])
+  }
+
+  return { clicks, highlights, registerClick, removeClick, $reset }
 })

@@ -1,11 +1,9 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-
 import { useChessboardStore } from '@/stores/chessboard'
 
 const store = useChessboardStore()
-const { clicks, highlights } = storeToRefs(store)
-const { registerClick } = store
+const { highlights } = storeToRefs(store)
 
 function handleClick(event) {
   // Get the clicked element's bounding rectangle
@@ -21,60 +19,72 @@ function handleClick(event) {
   // Calculate the size of a single square
   const squareSize = elementWidth / 8
 
-  // Quantize the click position into 8 squares, inverting the order for chess
-  // notation
+  // Quantize the click position into 8 squares, inverting the order for ease
+  // of rendering
   const squareX = 8 - Math.floor(relativeX / squareSize) - 1
   const rank = ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'][squareX]
   const file = 8 - Math.floor(relativeY / squareSize)
 
-  registerClick(`${rank}${file}`)
-  console.log(clicks.value)
-  console.log(highlights.value)
+  store.registerClick(`${rank}${file}`)
+}
+
+function createHighlightPositionStyle(highlight) {
+  const [rank, file] = highlight.split('')
+
+  return {
+    left: `${'abcdefgh'.indexOf(rank) * 12.5}%`,
+    top: `${(8 - parseInt(file)) * 12.5}%`
+  }
 }
 </script>
 
 <template>
-  <div class="chess-board_container">
-    <div class="chess-board" @click.stop.left="handleClick">
-      <div class="highlights" v-for="click in clicks" :key="click">
-        <div>{{ click }}</div>
-      </div>
+  <div class="chess-board-container">
+    <div class="chess-board" @mousedown.stop.left="handleClick">
+      <div
+        class="highlight"
+        v-for="highlight in highlights"
+        :key="highlight"
+        :style="createHighlightPositionStyle(highlight)"
+      ></div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.chess-board_container {
+.chess-board-container {
   width: auto;
-  margin-bottom: 1rem;
+  margin-bottom: var(--globalWindowPadding);
   flex: 0 1 100%;
 }
 
 @media (min-width: 960px) {
-  .chess-board_container {
-    max-height: calc(100dvh - 2 * 1rem);
+  .chess-board-container {
+    max-height: calc(100dvh - 2 * var(--globalWindowPadding));
     margin-bottom: 0;
-    margin-right: 1rem;
+    margin-right: var(--globalWindowPadding);
   }
 }
 
 .chess-board {
-  background-color: red;
+  background-image: url('../assets/green.png');
   background-repeat: no-repeat;
   background-size: 100%;
   border-radius: 3px;
   contain: layout;
   user-select: none;
-  background-image: url('../assets/green.png');
   aspect-ratio: 1 / 1;
   max-height: 100%;
+  position: relative;
 }
 
 .highlight {
-  height: 12.5%;
-  left: 0;
   position: absolute;
+  left: 0;
   top: 0;
-  width: 12.5%;
+  height: 12.5%; /* 100 / 8 */
+  width: 12.5%; /* 100 / 8 */
+  pointer-events: none;
+  background-color: rgba(158, 0, 0, 0.7);
 }
 </style>

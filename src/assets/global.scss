@@ -27,9 +27,11 @@
   --globalColorNeutral50: #f8f8f8;
   --globalColorNeutral100: #f1f1f1;
   --globalColorNeutral200: #dad8d6;
+  --globalColorNeutral300: #bebdb9;
   --globalSecondaryFont: 'Montserrat', sans-serif;
   --easeOutCubic: cubic-bezier(0.33, 1, 0.68, 1);
   --globalOverlayBackground: #f1f1f1;
+  --globalWindowPadding: 1.6rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -61,6 +63,7 @@
     --globalColorNeutral50: rgba(0, 0, 0, 0.1);
     --globalColorNeutral100: rgba(0, 0, 0, 0.2);
     --globalColorNeutral200: rgba(0, 0, 0, 0.4);
+    --globalColorNeutral300: rgba(0, 0, 0, 0.6);
     --globalOverlayBackground: #262421;
   }
 }
@@ -72,6 +75,10 @@
   margin: 0;
   position: relative;
   font-weight: normal;
+}
+
+html {
+  font-size: 62.5%;
 }
 
 body {
@@ -89,5 +96,9 @@ body {
   background-position-y: center;
   background-size: cover;
   color: var(--globalColorThemeFull);
-  padding: 1rem;
+  padding: var(--globalWindowPadding);
+}
+
+[v-cloak] {
+  display: none;
 }
